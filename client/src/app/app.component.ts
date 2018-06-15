@@ -13,6 +13,15 @@ export class AppComponent {
   cakes: any;
   singleCake: any;
   newCake: any;
+  cakeReview: any;
+
+  stars = [
+    { value: 5, text: '★★★★★' },
+    { value: 4, text: '★★★★☆' },
+    { value: 3, text: '★★★☆☆' },
+    { value: 2, text: '★★☆☆☆' },
+    { value: 1, text: '★☆☆☆☆' },
+  ];
 
   constructor(private _httpService: HttpService){};
 
@@ -27,6 +36,10 @@ export class AppComponent {
     observable.subscribe((data)=>{
       console.log(data);
       this.cakes = data;
+      for (let c of this.cakes){
+        c.stars = null;
+        c.comment = null;
+      }
     })
   };
 
@@ -45,14 +58,17 @@ export class AppComponent {
       console.log(data);
       this.singleCake = data;
     })
+    this.newCake = {baker: null, imagepath: null};
   };
 
-  newReviewToService(id, stars, comment){
-    let reviewObject = {stars:stars, comment:comment};
-    let observable = this._httpService.newReview(id, reviewObject);
+  newReviewToService(id, review, cake){
+    let observable = this._httpService.newReview(id, review);
     observable.subscribe((data)=>{
       console.log(data);
     })
+    cake.stars = null;
+    cake.comment = null;
+    this.getAllFromService();
   };
 
 

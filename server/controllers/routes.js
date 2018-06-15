@@ -20,7 +20,7 @@ router.post('/', function(req, res){
 
 router.put('/:id', function(req, res){
     console.log('resolving update');
-    Cakeboss.update(req, res);
+    Cakeboss.addReview(req, res);
 });
 
 router.delete('/:id', function(req, res){

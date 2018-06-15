@@ -13,9 +13,23 @@
       </form>
     </div>
     <div class="rating">
-      <!-- ngFor loop -->
+      <div class="thisCake" *ngFor="let thisCake of cakes">  
+        <img [src]="thisCake.imagepath" (click)="singleCake = thisCake;" > <!-- on click: populate singleCake -->
+        <form (submit)="newReviewToService(thisCake._id, {stars:thisCake.stars,comment:thisCake.comment}, thisCake)">
+          <select id="stars-select" [(ngModel)]="thisCake.stars" name="thisCake.stars">
+            <option value="5" selected="selected">★★★★★</option>
+            <option value="4">★★★★☆</option>
+            <option value="3">★★★☆☆</option>
+            <option value="2">★★☆☆☆</option>
+            <option value="1">★☆☆☆☆</option>
+          </select>
+          <textarea [(ngModel)]="thisCake.comment" name="thisCake.comment" rows=4></textarea>
+          <input type="submit" value="Review!">
+        </form>
+
+      </div>
     </div>
   </div>
-  <!-- <app-show-cake *ngIf="singleCake" [cakeToShow]="singleCake"></app-show-cake> -->
+  <app-show-cake *ngIf="singleCake" [cakeToShow]="singleCake"></app-show-cake>
 
 </div> <!-- end container -->

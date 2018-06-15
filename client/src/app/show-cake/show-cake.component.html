@@ -1,3 +1,16 @@
-<p>
-  show-cake works!
-</p>
+<div class="container">
+<h3>Baked by {{cakeToShow.baker}}</h3>
+  <div class="row">
+    <div class="split">
+        <img [src]="cakeToShow.imagepath">
+    </div>
+    <div class="split">
+        <p>Average Stars: {{cakeToShow.averagestars}}</p>
+        <div class="review" *ngFor="let rev of cakeToShow.reviews">
+          <p>{{rev.comment}}</p>
+          <p>{{rev.stars}} stars</p>
+        </div>
+    </div>
+
+  </div>
+</div>

@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "*{ margin: 0; outline: 0; padding: 0; }\r\n\r\nh2{ margin-bottom: 5px; }\r\n\r\n.container{ padding: 1% 2%; border: 10px solid cadetblue; border-radius: 10px; }\r\n\r\n/* remove borders later */\r\n\r\n.row{ display: block; width: 100%; }\r\n\r\n.new{ display: inline-block; width: 35%; margin-right: 4%; border: 1px solid black; background-color: lightskyblue; }\r\n\r\n.rating{ display: inline-block; width: 60%; background-color: lightgreen; }"
+module.exports = "*{ margin: 0; outline: 0; padding: 0; }\r\n\r\nh2{ margin-bottom: 5px; }\r\n\r\n.container{ padding: 1% 2%; border: 10px solid cadetblue; border-radius: 10px; }\r\n\r\n/* remove borders later */\r\n\r\n.row{ display: block; width: 100%; }\r\n\r\n.new{ display: inline-block; width: 35%; margin-right: 4%; vertical-align: top; border: 1px solid black; background-color: lightskyblue; }\r\n\r\n.rating{ display: inline-block; width: 60%; max-height: 40vh; vertical-align: top; background-color: lightgreen; overflow-y: scroll; }\r\n\r\n.thisCake{}\r\n\r\n.thisCake img{ display: inline-block; width: 15%; height: 15%; }\r\n\r\n.thisCake form{ display: inline-block; vertical-align: top; margin-left: 5% }\r\n\r\n.thisCake select{ display: block; font-size: 20px; }\r\n\r\n.thisCake textarea{ width: 100%; }"
 
 /***/ }),
 
@@ -41,7 +41,7 @@ module.exports = "*{ margin: 0; outline: 0; padding: 0; }\r\n\r\nh2{ margin-bott
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <h2>Rate My Cakes</h2>\n  <div class=\"row\">\n    <div class=\"new\">\n      <form (submit)=\"newCakeToService(newCake)\">\n        <p>Submit a cake to be rated</p>\n        <hr>\n        <p>Baker:</p>\n        <input type=\"text\" name=\"newCake.baker\" [(ngModel)]=\"newCake.baker\">\n        <p>Image URL:</p>\n        <input type=\"text\" name=\"newCake.imagepath\" [(ngModel)]=\"newCake.imagepath\">\n        <input type=\"submit\" value=\"Submit\">\n      </form>\n    </div>\n    <div class=\"rating\">\n      <!-- ngFor loop -->\n    </div>\n  </div>\n  <!-- <app-show-cake *ngIf=\"singleCake\" [cakeToShow]=\"singleCake\"></app-show-cake> -->\n\n</div> <!-- end container -->\n"
+module.exports = "<div class=\"container\">\n  <h2>Rate My Cakes</h2>\n  <div class=\"row\">\n    <div class=\"new\">\n      <form (submit)=\"newCakeToService(newCake)\">\n        <p>Submit a cake to be rated</p>\n        <hr>\n        <p>Baker:</p>\n        <input type=\"text\" name=\"newCake.baker\" [(ngModel)]=\"newCake.baker\">\n        <p>Image URL:</p>\n        <input type=\"text\" name=\"newCake.imagepath\" [(ngModel)]=\"newCake.imagepath\">\n        <input type=\"submit\" value=\"Submit\">\n      </form>\n    </div>\n    <div class=\"rating\">\n      <div class=\"thisCake\" *ngFor=\"let thisCake of cakes\">  \n        <img [src]=\"thisCake.imagepath\" (click)=\"singleCake = thisCake;\" > <!-- on click: populate singleCake -->\n        <form (submit)=\"newReviewToService(thisCake._id, {stars:thisCake.stars,comment:thisCake.comment}, thisCake)\">\n          <select id=\"stars-select\" [(ngModel)]=\"thisCake.stars\" name=\"thisCake.stars\">\n            <option value=\"5\" selected=\"selected\">★★★★★</option>\n            <option value=\"4\">★★★★☆</option>\n            <option value=\"3\">★★★☆☆</option>\n            <option value=\"2\">★★☆☆☆</option>\n            <option value=\"1\">★☆☆☆☆</option>\n          </select>\n          <textarea [(ngModel)]=\"thisCake.comment\" name=\"thisCake.comment\" rows=4></textarea>\n          <input type=\"submit\" value=\"Review!\">\n        </form>\n\n      </div>\n    </div>\n  </div>\n  <app-show-cake *ngIf=\"singleCake\" [cakeToShow]=\"singleCake\"></app-show-cake>\n\n</div> <!-- end container -->\n"
 
 /***/ }),
 
@@ -72,6 +72,13 @@ var AppComponent = /** @class */ (function () {
     function AppComponent(_httpService) {
         this._httpService = _httpService;
         this.title = 'ratemycakes';
+        this.stars = [
+            { value: 5, text: '★★★★★' },
+            { value: 4, text: '★★★★☆' },
+            { value: 3, text: '★★★☆☆' },
+            { value: 2, text: '★★☆☆☆' },
+            { value: 1, text: '★☆☆☆☆' },
+        ];
     }
     ;
     AppComponent.prototype.ngOnInit = function () {
@@ -86,6 +93,11 @@ var AppComponent = /** @class */ (function () {
         observable.subscribe(function (data) {
             console.log(data);
             _this.cakes = data;
+            for (var _i = 0, _a = _this.cakes; _i < _a.length; _i++) {
+                var c = _a[_i];
+                c.stars = null;
+                c.comment = null;
+            }
         });
     };
     ;
@@ -106,14 +118,17 @@ var AppComponent = /** @class */ (function () {
             console.log(data);
             _this.singleCake = data;
         });
+        this.newCake = { baker: null, imagepath: null };
     };
     ;
-    AppComponent.prototype.newReviewToService = function (id, stars, comment) {
-        var reviewObject = { stars: stars, comment: comment };
-        var observable = this._httpService.newReview(id, reviewObject);
+    AppComponent.prototype.newReviewToService = function (id, review, cake) {
+        var observable = this._httpService.newReview(id, review);
         observable.subscribe(function (data) {
             console.log(data);
         });
+        cake.stars = null;
+        cake.comment = null;
+        this.getAllFromService();
     };
     ;
     AppComponent = __decorate([
@@ -253,7 +268,7 @@ var HttpService = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ""
+module.exports = ".container{ padding: 1% 2%; border: 10px solid wheat; border-radius: 10px; max-height: 40vh; overflow-y: scroll; }\r\n\r\n.row{ display: block; width: 100%; }\r\n\r\nimg{ display: inline-block; width: 50%; height: 50%; }\r\n\r\n.review{ display: block;  }\r\n\r\n.split{ display: inline-block; width: 45%; margin: 0 1%; vertical-align: top; }"
 
 /***/ }),
 
@@ -264,7 +279,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  show-cake works!\n</p>\n"
+module.exports = "<div class=\"container\">\n<h3>Baked by {{cakeToShow.baker}}</h3>\n  <div class=\"row\">\n    <div class=\"split\">\n        <img [src]=\"cakeToShow.imagepath\">\n    </div>\n    <div class=\"split\">\n        <p>Average Stars: {{cakeToShow.averagestars}}</p>\n        <div class=\"review\" *ngFor=\"let rev of cakeToShow.reviews\">\n          <p>{{rev.comment}}</p>\n          <p>{{rev.stars}} stars</p>\n        </div>\n    </div>\n\n  </div>\n</div>"
 
 /***/ }),
 
@@ -294,6 +309,10 @@ var ShowCakeComponent = /** @class */ (function () {
     }
     ShowCakeComponent.prototype.ngOnInit = function () {
     };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], ShowCakeComponent.prototype, "cakeToShow", void 0);
     ShowCakeComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-show-cake',

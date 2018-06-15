@@ -6,6 +6,16 @@ h2{ margin-bottom: 5px; }
 
 .row{ display: block; width: 100%; }
 
-.new{ display: inline-block; width: 35%; margin-right: 4%; border: 1px solid black; background-color: lightskyblue; }
+.new{ display: inline-block; width: 35%; margin-right: 4%; vertical-align: top; border: 1px solid black; background-color: lightskyblue; }
 
-.rating{ display: inline-block; width: 60%; background-color: lightgreen; }
+.rating{ display: inline-block; width: 60%; max-height: 40vh; vertical-align: top; background-color: lightgreen; overflow-y: scroll; }
+
+.thisCake{}
+
+    .thisCake img{ display: inline-block; width: 15%; height: 15%; }
+
+    .thisCake form{ display: inline-block; vertical-align: top; margin-left: 5% }
+
+    .thisCake select{ display: block; font-size: 20px; }
+
+    .thisCake textarea{ width: 100%; }

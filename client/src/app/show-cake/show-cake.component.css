@@ -1,0 +1,9 @@
+.container{ padding: 1% 2%; border: 10px solid wheat; border-radius: 10px; max-height: 40vh; overflow-y: scroll; }
+
+.row{ display: block; width: 100%; }
+
+img{ display: inline-block; width: 50%; height: 50%; }
+
+.review{ display: block;  }
+
+.split{ display: inline-block; width: 45%; margin: 0 1%; vertical-align: top; }

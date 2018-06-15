@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-show-cake',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./show-cake.component.css']
 })
 export class ShowCakeComponent implements OnInit {
+
+  @Input() cakeToShow: any;
 
   constructor() { }
 
