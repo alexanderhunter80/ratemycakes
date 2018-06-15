@@ -10,7 +10,7 @@ h2{ margin-bottom: 5px; }
 
 .rating{ display: inline-block; width: 60%; max-height: 40vh; vertical-align: top; background-color: lightgreen; overflow-y: scroll; }
 
-.thisCake{}
+/* .thisCake{} */
 
     .thisCake img{ display: inline-block; width: 15%; height: 15%; }
 
