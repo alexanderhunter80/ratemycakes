@@ -1,0 +1,21 @@
+<div class="container">
+  <h2>Rate My Cakes</h2>
+  <div class="row">
+    <div class="new">
+      <form (submit)="newCakeToService(newCake)">
+        <p>Submit a cake to be rated</p>
+        <hr>
+        <p>Baker:</p>
+        <input type="text" name="newCake.baker" [(ngModel)]="newCake.baker">
+        <p>Image URL:</p>
+        <input type="text" name="newCake.imagepath" [(ngModel)]="newCake.imagepath">
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+    <div class="rating">
+      <!-- ngFor loop -->
+    </div>
+  </div>
+  <!-- <app-show-cake *ngIf="singleCake" [cakeToShow]="singleCake"></app-show-cake> -->
+
+</div> <!-- end container -->
